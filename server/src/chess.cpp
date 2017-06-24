@@ -30,6 +30,7 @@ void Chess::init_m() {
 	m[7][1] = m[7][7] = PAO_1;
 	m[3][0] = m[3][2] = m[3][4] = m[3][6] = m[3][8] = BING_2;
 	m[6][0] = m[6][2] = m[6][4] = m[6][6] = m[6][8] = BING_1;
+	// {"before_x": 7, "before_y": 1, "after_x": 3, "after_y": 1}
 }
 
 bool Chess::move(Client* p, int before_x, int before_y, int after_x, int after_y) {
@@ -288,12 +289,25 @@ bool Chess::ma_move(int before_x, int before_y, int after_x, int after_y) {
 bool Chess::che_move(int before_x, int before_y, int after_x, int after_y) {
 	if (after_x - before_x != 0 && after_y - before_y != 0) 
 		return false;
-	int dx_unit = after_x - before_x >= 0 ? 1 : -1;
-	int dy_unit = after_y - before_y >= 0 ? 1 : -1;
-	for (int i = before_x+dx_unit; i < after_x; i += dx_unit)
+	int from_x, to_x;
+	from_x = before_x;
+	to_x = after_x;
+	if (after_x - before_x < 0) {
+		from_x = after_x;
+		to_x = before_x;
+	}
+	for (int i = from_x+1; i < to_x; i++)
 		if (m[i][before_y] != NONE) 
 			return false;
-	for (int i = before_y+dy_unit; i < after_y; i += dy_unit)
+
+	int from_y, to_y;
+	from_y = before_y;
+	to_y = after_y;
+	if (after_y - before_y < 0) {
+		from_y = after_y;
+		to_y = before_y;
+	}
+	for (int i = from_y+1; i < to_y; i++)
 		if (m[before_x][i] != NONE) 
 			return false;
 	return true;
@@ -301,15 +315,28 @@ bool Chess::che_move(int before_x, int before_y, int after_x, int after_y) {
 bool Chess::pao_move(int before_x, int before_y, int after_x, int after_y) {
 	if (after_x - before_x != 0 && after_y - before_y != 0) 
 		return false;
-	int dx_unit = after_x - before_x >= 0 ? 1 : -1;
-	int dy_unit = after_y - before_y >= 0 ? 1 : -1;
 	int mid_cnt = 0;
-	for (int i = before_x+dx_unit; i < after_x; i += dx_unit)
-		if (m[i][before_y] != NONE)
+
+	int from_x, to_x;
+	from_x = before_x;
+	to_x = after_x;
+	if (after_x - before_x < 0) {
+		from_x = after_x;
+		to_x = before_x;
+	}
+	for (int i = from_x+1; i < to_x; i++)
+		if (m[i][before_y] != NONE) 
 			mid_cnt++;
 
-	for (int i = before_y+dy_unit; i < after_y; i += dy_unit)
-		if (m[before_x][i] != NONE)
+	int from_y, to_y;
+	from_y = before_y;
+	to_y = after_y;
+	if (after_y - before_y < 0) {
+		from_y = after_y;
+		to_y = before_y;
+	}
+	for (int i = from_y+1; i < to_y; i++)
+		if (m[before_x][i] != NONE) 
 			mid_cnt++;
 	if (m[after_x][after_y] == NONE)
 		return mid_cnt == 0; 
