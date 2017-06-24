@@ -13,6 +13,9 @@ Chess::Chess(Client* p1, Client* p2)  {
 }
 
 void Chess::init_m() {
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 9; j++)
+			m[i][j] = NONE;
 	m[0][0] = m[0][8] = CHE_2;
 	m[9][0] = m[9][8] = CHE_1;
 	m[0][1] = m[0][7] = MA_2;
@@ -285,12 +288,12 @@ bool Chess::ma_move(int before_x, int before_y, int after_x, int after_y) {
 bool Chess::che_move(int before_x, int before_y, int after_x, int after_y) {
 	if (after_x - before_x != 0 && after_y - before_y != 0) 
 		return false;
-	int dx_unit = after_x - before_x > 0 ? 1 : -1;
-	int dy_unit = after_y - before_y > 0 ? 1 : -1;
-	for (int i = before_x+1; i < after_x; i += dx_unit)
+	int dx_unit = after_x - before_x >= 0 ? 1 : -1;
+	int dy_unit = after_y - before_y >= 0 ? 1 : -1;
+	for (int i = before_x+dx_unit; i < after_x; i += dx_unit)
 		if (m[i][before_y] != NONE) 
 			return false;
-	for (int i = before_y+1; i < after_y; i += dy_unit)
+	for (int i = before_y+dy_unit; i < after_y; i += dy_unit)
 		if (m[before_x][i] != NONE) 
 			return false;
 	return true;
@@ -298,14 +301,14 @@ bool Chess::che_move(int before_x, int before_y, int after_x, int after_y) {
 bool Chess::pao_move(int before_x, int before_y, int after_x, int after_y) {
 	if (after_x - before_x != 0 && after_y - before_y != 0) 
 		return false;
-	int dx_unit = after_x - before_x > 0 ? 1 : -1;
-	int dy_unit = after_y - before_y > 0 ? 1 : -1;
+	int dx_unit = after_x - before_x >= 0 ? 1 : -1;
+	int dy_unit = after_y - before_y >= 0 ? 1 : -1;
 	int mid_cnt = 0;
-	for (int i = before_x+1; i < after_x; i += dx_unit)
+	for (int i = before_x+dx_unit; i < after_x; i += dx_unit)
 		if (m[i][before_y] != NONE)
 			mid_cnt++;
 
-	for (int i = before_y+1; i < after_y; i += dy_unit)
+	for (int i = before_y+dy_unit; i < after_y; i += dy_unit)
 		if (m[before_x][i] != NONE)
 			mid_cnt++;
 	if (m[after_x][after_y] == NONE)
