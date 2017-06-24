@@ -113,7 +113,13 @@ int main(int argc, char *argv[]) {
 
         mainBoard->Draw(modelShader, cameraView, projection);
 
-        font.Draw(fontShader, "FPS: " + to_string(int(1 / deltaTime)), 700.0f, 570.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        if (mainBoard->youTurn)
+            font.Draw(fontShader, "Your Turn", 10.0f, 530.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        if (mainBoard->getColorType() == RED)
+            font.Draw(fontShader, "You are: Red", 10.0f, 570.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        if (mainBoard->getColorType() == BLACK)
+            font.Draw(fontShader, "You are: Black", 10.0f, 570.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
         glfwSwapBuffers(window);
     }
     delete mainCamera;
@@ -123,3 +129,4 @@ int main(int argc, char *argv[]) {
 //    close(fd);
     return 0;
 }
+
