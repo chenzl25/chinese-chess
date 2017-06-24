@@ -35,7 +35,7 @@ bool Chess::move(Client* p, int before_x, int before_y, int after_x, int after_y
 		return false;
 	if (!check_inside(before_x, before_y) || !check_inside(after_x, after_y))
 		return false;
-	if (before_x == after_x && before_y && after_y)
+	if (before_x == after_x && before_y == after_y)
 		return false;
 	PIECE_TYPE t = m[before_x][before_y];
 	if (p == _p1) {
