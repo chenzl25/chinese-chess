@@ -27,6 +27,7 @@ public:
     Color_Type getColorType();
     int endRow, endCol;
     bool youTurn;
+    bool end, win;
 
 private:
     int startRow, startCol;

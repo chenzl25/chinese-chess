@@ -30,7 +30,6 @@ void Chess::init_m() {
 	m[7][1] = m[7][7] = PAO_1;
 	m[3][0] = m[3][2] = m[3][4] = m[3][6] = m[3][8] = BING_2;
 	m[6][0] = m[6][2] = m[6][4] = m[6][6] = m[6][8] = BING_1;
-	// {"before_x": 7, "before_y": 1, "after_x": 3, "after_y": 1}
 }
 
 bool Chess::move(Client* p, int before_x, int before_y, int after_x, int after_y) {
@@ -198,17 +197,21 @@ bool Chess::check_inside_shi2(int x, int y) {
 
 bool Chess::check_inside_xiang1(int x, int y) {
 	return 	(x == 5 && y == 2) ||
-			(x == 5 && y == 7) ||
+			(x == 5 && y == 6) ||
 			(x == 7 && y == 4) ||
+			(x == 7 && y == 0) ||
+			(x == 7 && y == 8) ||
 			(x == 9 && y == 2) ||
-			(x == 9 && y == 7);
+			(x == 9 && y == 6);
 }
 bool Chess::check_inside_xiang2(int x, int y) {
 	return 	(x == 4 && y == 2) ||
-			(x == 4 && y == 7) ||
+			(x == 4 && y == 6) ||
 			(x == 2 && y == 4) ||
+			(x == 2 && y == 0) ||
+			(x == 2 && y == 8) ||
 			(x == 0 && y == 2) ||
-			(x == 0 && y == 7);
+			(x == 0 && y == 6);
 }
 
 bool Chess::shuai1_move(int before_x, int before_y, int after_x, int after_y) {

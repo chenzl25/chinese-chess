@@ -96,10 +96,7 @@ export default {
   },
   methods: {
     close() {
-      this.$store.commit('setPopupStatus', [
-        { name: 'region', value: false },
-        { name: 'toast', value: true }
-      ]);
+      this.$store.commit('setPopupStatus', { name: 'region', value: false });
     },
     setRegion() {
       this.$store.commit('setUserInfo',
@@ -110,6 +107,8 @@ export default {
           }
         });
       this.close();
+      this.$store.commit('setToastMessage', '修改成功');
+      this.$store.commit('setPopupStatus', { name: 'toast', value: true });
     },
     addressChange (value, index) {
       switch (index) {
@@ -138,7 +137,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 9% 9vw 0 9vw;
+  padding: 5vh 9vw 0 9vw;
   display: flex;
   flex-direction: column;
 }

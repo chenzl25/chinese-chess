@@ -49,7 +49,14 @@ export default {
     assign() {
       this.form1 = [
         { title: '游戏ID', text: this.user.id },
-        { title: '我的等级', text: this.user.level },
+        {
+          title: '我的等级', text: this.user.level,
+          callback: (function(self) {
+            return function() {
+              self.$router.push({ name: 'Grade' })
+            }
+          })(this)
+        },
         {
           title: '昵称', text: this.user.name,
           callback: this.openPopup('dialog', {
@@ -89,7 +96,7 @@ export default {
 #setting-content {
   position: relative;
   width: 100%;
-  height: 82vh;
+  height: 80vh;
 }
 #setting-content-container {
   position: relative;

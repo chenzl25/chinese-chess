@@ -25,7 +25,7 @@ void Controller::KeyCallback(GLFWwindow* window, int key, int scancode, int acti
             keys[key] = false;
     }
 
-    if (mainBoard != nullptr) {
+    if (mainBoard != nullptr && !mainBoard->end) {
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
             mainBoard->ChooseNext();
         }

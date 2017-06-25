@@ -13,7 +13,7 @@ ChessBoard::ChessBoard() : pane(PLANE) {
     createBoard();
     initTexture();
 
-    youTurn = true;
+    youTurn = false;
 }
 
 ChessBoard::~ChessBoard() {
@@ -35,6 +35,8 @@ ChessBoard::~ChessBoard() {
 void ChessBoard::SetConnection(int fd, bool isFirst) {
     this->fd = fd;
     youTurn = isFirst;
+    end = false;
+    win = false;
     if (youTurn)
         colorType = BLACK;
     else
@@ -91,7 +93,7 @@ void ChessBoard::Select() {
             buf[nread] = '\0';
             json recv_json = json::parse(buf, buf + nread);
             cout << recv_json << endl;
-            if (!recv_json["ok"]) {
+            if (recv_json["ok"] != nullptr && !recv_json["ok"]) {
                 selected = false;
                 cout << "Put" << endl;
                 return;
@@ -106,6 +108,10 @@ void ChessBoard::Select() {
             cout << "Put" << endl;
             youTurn = false;
 //            debug();
+            if (recv_json["win"] != nullptr) {
+                end = true;
+                win = recv_json["win"];
+            }
         }
     }
 }
