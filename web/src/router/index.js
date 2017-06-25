@@ -24,5 +24,9 @@ export default new Router({
   }, {
     path: '*',
     redirect: '/'
+  }, {
+  	path: '/home',
+  	name: 'Home',
+  	component: resolve => require(['@/components/pages/Home/Home'], resolve)
   }]
 })

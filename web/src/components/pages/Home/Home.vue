@@ -1,11 +1,11 @@
 <template> 
 
-<div class = "home">
+<div class = "home"  :style="{ backgroundImage: 'url(' + img + ')' }">
   
   <canvas id="Mycanvas" ref="canvas"></canvas>
 
   <div class = "home_main">
-    <div class = "home_main_boay">
+    <div class = "home_main_body" >
 
       <div class = "home_header">
         <div id="home_title">弈乎</div>
@@ -33,22 +33,22 @@
         
         <div class = "home_navs_body" v-if="activeTab === 'login'">
           <form id="home_login" name="home_login" method="post" class="form">
-            <mu-text-field label="username" hintText='username'/><br/>
-            <mu-text-field label="password" hintText='password' type="password" labelFloat/><br/>
-            <mu-raised-button @click="login()" type='submit' label="登录游戏中心" class="home_button" secondary/>
+            <mu-text-field class="home_input" label="username" hintText='username'/><br/>
+            <mu-text-field class="home_input" label="password" hintText='password' type="password" labelFloat/><br/>
+            <mu-raised-button @click="login()" type='submit' label="登录游戏中心" class="home_button" to="/" secondary/>
           </form>
         </div>
         <div class = "home_navs_body" v-if="activeTab === 'register'">
           <form id="home_register" name="home_register" method="post" class="form">
-            <mu-text-field label="username" hintText='用户名不能以数字或下划线开头'/><br/>
-            <mu-text-field label="password" hintText='密码长度为6-16个字符' type="password" labelFloat/><br/>
-            <mu-raised-button type='submit' label="确认注册并登录" class="home_button" @click="register()" secondary/>
+            <mu-text-field class="home_input" label="username" hintText='用户名不能以数字或下划线开头'/><br/>
+            <mu-text-field class="home_input" label="password" hintText='密码长度为6-16个字符' type="password" labelFloat/><br/>
+            <mu-raised-button type='submit' label="确认注册并登录" class="home_button" @click="register()" to="/" secondary/>
           </form>
         </div>
         <div class = "home_navs_body" v-if="activeTab === 'guest'">
           <form id="home_guest" name="home_guest" method="post" class="form">
-            <mu-text-field label="username" hintText='用户名不能以数字或下划线开头'/><br/>
-            <mu-raised-button type='submit' label="进入游戏大厅" class="home_button" @click="register()" secondary/>
+            <mu-text-field v-model="username" class="home_input" label="username" hintText='用户名不能以数字或下划线开头'/><br/>
+            <mu-raised-button type='submit' label="进入游戏大厅" class="home_button" @click="register()" to="/"  secondary />
           </form>
         </div>
 
@@ -63,13 +63,20 @@
 export default {
   data () {
     return {
+      img: require('@/assets/pages/UserSetting/bg.png'),
       activeTab: 'guest',
       width: 800,
       height: 1200,
       pointnum:30,
       canvas:null,
       context:null,
-      circles:[]
+      circles:[],
+      username:null
+    }
+  },
+  computed: {
+    link : function() {
+      return "{ name: 'Chess', params: { username: "+username+" }}"
     }
   },
   methods: {
@@ -124,8 +131,6 @@ export default {
 
     draw() {
       this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
-   //   console.log(this.circles[0].x);
-   //   console.log(this.circles[0].y);
       for (var i = 0; i < this.pointnum; i++) {
         this.drawCircle(this.context,this.circles[i].x,this.circles[i].y,this.circles[i].r,this.circles[i].move_x,this.circles[i].move_y);
       }
@@ -174,17 +179,6 @@ export default {
           that.circles[i].y = that.height;
         else if (that.circles[i].y > that.height)
           that.circles[i].y = 0;
-      
-
-      /*
-       var cir = that.circle[i];
-        cir.x += cir.move_x;
-        cir.y += cir.move_y;
-        if (cir.x > that.width) that.x = 0;
-        else if (cir.x < 0) cir.x = that.width;
-        if (cir.y > that.height) that.y = 0;
-        else if (cir.y < 0) cir.y = that.height;
-        */
       }
       that.draw();
      },20);
@@ -202,7 +196,9 @@ export default {
     background-color: #f7fafc;
     background-size: 100% 100%;
 
-    border: 1px solid green;
+
+    background: no-repeat;
+    background-size: 100% 100%
   }
 
 
@@ -220,16 +216,20 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 99;
+
   }
 
-  .home_main_boay {
+  .home_main_body {
+
     width: 100%;
     height: 100%;
     max-width: 400px;
     margin: auto;
+
   }
 
   .home_header {
+    padding: 0%;
     width: 100%;
     height: 20%;
   }
@@ -260,26 +260,40 @@ export default {
   }
 
   .active_tab {
-    color: blue;
+    color: #448aff;
   }
 
   #home_title {
     height: 80%;
     font-size: 12vh;
-    color: #b3e5fc;
+    color: #ffc107;
     margin-top: 0%;
     font-weight: bold;
     margin-bottom: 0%;
+    font-family:Georgia,Serif
   }
 
   #home_title2 {
-
+    height: 20%;
+    font-family:Arial,Verdana,Sans-serif;
     font-size: 2.7vh;
     font-weight: bold;
   }
 
   .home_button {
     font-size: 4vh;
+
+  }
+
+  .home_input {
+    font-size: 2.7vh;
+    margin-bottom: 8%;
+  }
+
+  .disable {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
   }
 
 </style>
