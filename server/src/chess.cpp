@@ -199,6 +199,8 @@ bool Chess::check_inside_xiang1(int x, int y) {
 	return 	(x == 5 && y == 2) ||
 			(x == 5 && y == 6) ||
 			(x == 7 && y == 4) ||
+			(x == 7 && y == 0) ||
+			(x == 7 && y == 8) ||
 			(x == 9 && y == 2) ||
 			(x == 9 && y == 6);
 }
@@ -206,6 +208,8 @@ bool Chess::check_inside_xiang2(int x, int y) {
 	return 	(x == 4 && y == 2) ||
 			(x == 4 && y == 6) ||
 			(x == 2 && y == 4) ||
+			(x == 2 && y == 0) ||
+			(x == 2 && y == 8) ||
 			(x == 0 && y == 2) ||
 			(x == 0 && y == 6);
 }
