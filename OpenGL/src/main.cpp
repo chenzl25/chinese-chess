@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     glm::mat4 projection = glm::perspective(mainCamera->Zoom, (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 1000.0f);
     // Game loop
 
-    if(argc != 3) {
+    if(argc != 2) {
         printf("Usage: %s <port> <name>\n", argv[0]);
         exit(1);
     }
@@ -65,33 +65,9 @@ int main(int argc, char *argv[]) {
     socksrv.sin_port = htons(port);
     connect(fd, (struct sockaddr*)&socksrv, sizeof(socksrv));
     // init
-    json data = {{"name", argv[2]}};
-    std::string s = data.dump();
-    write(fd, s.c_str(), s.length());
-    char buf[1024] = {0};
-    int nread = read(fd, buf, sizeof(buf));
-    buf[nread] = '\0';
-    json recv_json;
-    if(nread == 0) {
-        printf("%s\n","server closed!");
-    } else {
-        recv_json = json::parse(buf, buf+nread);
-        cout << recv_json["list"][0]["name"] << endl;
-    }
+
     // send name
-    nread = read(fd, buf, sizeof(buf));
-    buf[nread] = '\0';
-    recv_json = json::parse(buf, buf + nread);
-    cout << recv_json << endl;
-    data = {{"accept", true}, {"recv_from_fd", recv_json["recv_from_fd"]}};
-    s = data.dump();
-    write(fd, s.c_str(), s.length());
-    // accept
-    nread = read(fd, buf, sizeof(buf));
-    buf[nread] = '\0';
-    recv_json = json::parse(buf, buf + nread);
-    cout << recv_json << endl;
-    mainBoard->SetConnection(fd, recv_json["first"]);
+
     // set first
     Listener listener(fd, mainBoard);
 
@@ -113,13 +89,22 @@ int main(int argc, char *argv[]) {
 
         mainBoard->Draw(modelShader, cameraView, projection);
 
-        if (mainBoard->youTurn)
-            font.Draw(fontShader, "Your Turn", 10.0f, 530.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
         if (mainBoard->getColorType() == RED)
             font.Draw(fontShader, "You are: Red", 10.0f, 570.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
         if (mainBoard->getColorType() == BLACK)
             font.Draw(fontShader, "You are: Black", 10.0f, 570.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
-
+        if (mainBoard->youTurn)
+            font.Draw(fontShader, "Your Turn", 10.0f, 530.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        else
+            font.Draw(fontShader, "Waiting...", 10.0f, 530.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        if (mainBoard->end) {
+            if (mainBoard->win) {
+                font.Draw(fontShader, "You Win", 10.0f, 490.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+            } else {
+                font.Draw(fontShader, "You Lose", 10.0f, 490.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+            }
+        }
         glfwSwapBuffers(window);
     }
     delete mainCamera;
@@ -129,4 +114,3 @@ int main(int argc, char *argv[]) {
 //    close(fd);
     return 0;
 }
-
